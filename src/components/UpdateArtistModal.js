@@ -6,6 +6,7 @@ const UpdateArtistModal = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const artistId = props.artist.id
+
     const updatedArtist = {
       name: e.target.name.value,
       dob: e.target.dob.value,
@@ -13,8 +14,6 @@ const UpdateArtistModal = (props) => {
       address: e.target.address.value,
       first_release_year: e.target.first_release_year.value,
       no_of_albums_released: e.target.no_of_albums_released.value,
-      created_at: e.target.created_at.value,
-      updated_at: e.target.updated_at.value,
     };
 
     UpdateArtist(artistId, updatedArtist, props.token)
@@ -109,26 +108,8 @@ const UpdateArtistModal = (props) => {
                     required
                   />
                 </Form.Group>
-
-                <Form.Group controlId="created_at">
-                  <Form.Label>Created At</Form.Label>
-                  <Form.Control
-                    type="date"
-                    name="created_at"
-                    defaultValue={props.artist.created_at}
-                    required
-                  />
-                </Form.Group>
-
-                <Form.Group controlId="updated_at">
-                  <Form.Label>Updated At</Form.Label>
-                  <Form.Control
-                    type="date"
-                    name="updated_at"
-                    defaultValue={props.artist.updated_at}
-                    required
-                  />
-                </Form.Group>
+               
+              
 
                 <Button variant="primary" type="submit">
                   Submit

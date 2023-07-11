@@ -7,18 +7,6 @@ import { CookiesProvider } from 'react-cookie';
 
 import App from './App';
 
-function Router() {
-  return (
-    <CookiesProvider>
-    <BrowserRouter>
-      <Routes>
-      <Route path="/" element={<Login />} />
-
-      </Routes>
-    </BrowserRouter>
-    </CookiesProvider>
-  );
-}
 
 ReactDOM.render(
   <React.StrictMode>

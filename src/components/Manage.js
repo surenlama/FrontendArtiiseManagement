@@ -7,6 +7,7 @@ import UpdateUserModal from "./UpdateUserModal";
 import {FaEdit} from 'react-icons/fa';
 import { RiDeleteBin5Line } from 'react-icons/ri';
 import { useCookies } from 'react-cookie';
+import Navigation from './Navigation'
 
 
 const Manage = () => {
@@ -24,7 +25,7 @@ const Manage = () => {
     }
     getUsers(token['mytoken']).then((data) => {
       if (mounted) {
-        setUsers(data);
+        setUsers(data.results);
       }
     });
     return () => {
@@ -60,6 +61,8 @@ const Manage = () => {
   let EditUserClose = () => setEditUserShow(false);
 
   return (
+    <>
+    <Navigation />
     <div className="row side-row">
       <Table striped bordered hover>
         <thead>
@@ -126,7 +129,8 @@ const Manage = () => {
         token = {token['mytoken']}
       ></AddUserModal>
     </div>
-  );
+    </>
+ );
 };
 
 export default Manage;

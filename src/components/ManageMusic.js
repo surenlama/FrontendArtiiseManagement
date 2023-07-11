@@ -7,6 +7,7 @@ import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { useCookies } from "react-cookie";
 import UpdateMusicModal from "./UpdateMusicModal";
+import Navigation from './Navigation'
 
 const ManageMusic = () => {
   const [musics, setMusics] = useState([]);
@@ -23,7 +24,7 @@ const ManageMusic = () => {
     }
     getMusics(token["mytoken"])
       .then((data) => {
-        console.log("Musics data:", data);
+        console.log("Musics data:", data.results.artist_id);
         if (mounted) {
           setMusics(data.results);
         }
@@ -66,6 +67,8 @@ const ManageMusic = () => {
   let EditMusicClose = () => setEditMusicShow(false);
 
   return (
+    <>
+    <Navigation />
     <div className="row side-row">
       <Table striped bordered hover>
         <thead>
@@ -85,7 +88,7 @@ const ManageMusic = () => {
             musics.map((music) => (
               <tr key={music.id}>
                 <td>{music.id}</td>
-                <td>{music.artist_id.name}</td>
+                <td>{music.artist_id}</td>
                 <td>{music.title}</td>
                 <td>{music.album_name}</td>
                 <td>{music.genre}</td>
@@ -135,6 +138,7 @@ const ManageMusic = () => {
         token={token["mytoken"]}
       ></AddMusicModal>
     </div>
+    </>
   );
 };
 

@@ -89,24 +89,8 @@ const AddArtistModal = (props) => {
                     placeholder=""
                   />
                 </Form.Group>
-                <Form.Group controlId="created_at">
-                  <Form.Label>Created At</Form.Label>
-                  <Form.Control
-                    type="datetime-local"
-                    name="created_at"
-                    required
-                    placeholder=""
-                  />
-                </Form.Group>
-                <Form.Group controlId="updated_at">
-                  <Form.Label>Updated At</Form.Label>
-                  <Form.Control
-                    type="datetime-local"
-                    name="updated_at"
-                    required
-                    placeholder=""
-                  />
-                </Form.Group>
+            
+               
                 <Form.Group>
                   <Button variant="primary" type="submit">
                     Submit

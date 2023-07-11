@@ -32,7 +32,7 @@ useEffect(()=>{
 },[token])
   return (
     <div>
-      <Navbar bg="dark" variant="dark" expand="lg">
+      <Navbar bg="dark" variant="dark" expand="lg" style={{display:"flex",justifyContent:"space-between", paddingRight:"60px"}}>
         <Navbar.Brand className="app-logo" href="#home">
           <img
             alt=""
@@ -42,8 +42,9 @@ useEffect(()=>{
             className="d-inline-block align-center"
           />{" "}
           Artist Management System
-        <button  onClick={logoutBtn} className="btn btn-primary">Logout</button>
+       
         </Navbar.Brand>
+        <button  onClick={logoutBtn} className="btn btn-primary mr-3" >Logout</button>
       </Navbar>
       <div className="sidebar">
         <CDBSidebar textColor="#333" backgroundColor="#f0f0f0">

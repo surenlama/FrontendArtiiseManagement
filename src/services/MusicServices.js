@@ -24,8 +24,7 @@ export function addMusic(music,token){
       title:music.title,
       album_name:music.album_name,
       genre:music.genre,
-      created_at:music.created_at,
-      updated_at:music.updated_at,
+
       
     },{
       headers: {

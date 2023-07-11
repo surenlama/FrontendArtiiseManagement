@@ -49,33 +49,33 @@ export function getUsers(token) {
     })
        .then(response => response.data)
 }
+export function addUser(user, token) {
+  console.log(user);
+  const currentDate = new Date();
 
-export function addUser(user,token){
-    return axios.post('http://127.0.0.1:8000/userapi/', {
-
-      id:null,
-      first_name:user.first_name.value,
-      last_name:user.last_name.value,
-      phone:user.phone.value,
-      email:user.email.value,
-      dob:user.dob.value,
-      password:user.password.value,
-      last_login:user.last_login.value,
-      is_superuser:user.is_superuser.value,
-      date_joined:user.date_joined.value,
-      is_staff:user.is_staff.value,
-      is_active:user.is_active.value,
-    },{
-      headers: {
-        'Accept':'application/json',
-        'Content-Type':'application/json',
-        Authorization: `Token ${token}`,
-
-      }
-    }
-    )
-      .then(response=>response.data)
-  }
+  return axios.post('http://127.0.0.1:8000/userapi/', {
+    id: null,
+    first_name: user.first_name.value,
+    last_name: user.last_name.value,
+    phone: user.phone.value,
+    email: user.email.value,
+    dob: user.dob.value,
+    address: user.address.value,
+    gender: user.gender.value,
+    password: user.password.value,
+    is_superuser: false,
+    date_joined: currentDate,
+    is_staff: false,
+    is_active: true,
+  }, {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Token ${token}`,
+    },
+  })
+    .then(response => response.data);
+}
 
 
   export function UpdateUser(userid, user, token) {

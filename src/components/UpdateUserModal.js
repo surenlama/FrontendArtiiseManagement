@@ -7,18 +7,21 @@ const UpdateUserModal=(props)=>{
   const handleSubmit = (e) => {
     e.preventDefault();
     const userId = props.user.id;
+    const currentDate = new Date();
+
     const updatedUser = {
       first_name: e.target.first_name.value,
       last_name: e.target.last_name.value,
       phone: e.target.phone.value,
       email: e.target.email.value,
       dob: e.target.dob.value,
-      password: e.target.password.value, // Corrected assignment
-      last_login: e.target.last_login.value,
-      is_superuser: e.target.is_superuser.value,
-      date_joined: e.target.date_joined.value,
-      is_staff: e.target.is_staff.value,
-      is_active: e.target.is_active.value,
+      address: e.target.address.value,
+      gender: e.target.gender.value,
+      password: e.target.password.value, 
+      is_superuser: false,
+      date_joined: currentDate,
+      is_staff: false,
+      is_active: true,
     };
     
     UpdateUser(userId, updatedUser, props.token)
@@ -81,6 +84,13 @@ const UpdateUserModal=(props)=>{
 
                   placeholder="" />
                 </Form.Group>
+                <Form.Group controlId="address">
+                  <Form.Label>Address</Form.Label>
+                  <Form.Control type="text" name="address" required 
+                                    defaultValue={props.user.address}
+
+                  placeholder="" />
+                </Form.Group>
                 <Form.Group controlId="password">
                   <Form.Label>Password</Form.Label>
                   <Form.Control type="password" name="password" required 
@@ -88,36 +98,18 @@ const UpdateUserModal=(props)=>{
 
                   placeholder="" />
                 </Form.Group>
-                <Form.Group controlId="last_login">
-                  <Form.Label>Last Login</Form.Label>
-            <Form.Control type="datetime-local" name="last_login" required 
-                              defaultValue={props.user.last_login}
+                <Form.Group controlId="gender">
 
-            placeholder="" />
+                <Form.Label>Gender</Form.Label>
+                  <Form.Control as="select" name="gender" required>
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </Form.Control>
                 </Form.Group>
-                <Form.Group controlId="is_superuser">
-    <Form.Check type="checkbox" name="is_superuser" label="Is Superuser" 
-                                  defaultValue={props.user.is_superuser}
-
-    />
-                </Form.Group>
-                <Form.Group controlId="date_joined">
-                  <Form.Label>Date Joined</Form.Label>
-                  <Form.Control type="date" name="date_joined" required
-                                  defaultValue={props.user.date_joined}
-                                  placeholder="" />
-                </Form.Group>
-                <Form.Group controlId="is_staff">
-                  <Form.Check type="checkbox" name="is_staff" label="Is Staff"
-                         defaultValue={props.user.is_staff}
-
-                  />
-                </Form.Group>
-                <Form.Group controlId="is_active">
-                  <Form.Check type="checkbox" name="is_active" label="Is Active" 
-                         defaultValue={props.user.is_active}
-                         />
-                </Form.Group>
+           
+           
                 <Form.Group>
                   <Button variant="primary" type="submit">
                     Submit

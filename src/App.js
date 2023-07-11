@@ -1,5 +1,4 @@
 import './App.css';
-import Navigation from './components/Navigation';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Home from './components/Home';
 import Users from './components/Users';
@@ -12,12 +11,12 @@ import ManageMusic from './components/ManageMusic';
 function App() {
   return (
     <BrowserRouter>
-      <Navigation />
+      {/* <Navigation /> */}
       <Routes>
       {/* <Route exact path="/" element={<Login/>} /> */}
       <Route path="/" element={<Login />} />
 
-        <Route exact path="/home" element={<Home/>} />
+        {/* <Route exact path="/home" element={<Home/>} /> */}
         <Route exact path="/users" element={<Users/>} />
         <Route exact path="/manage" element={<Manage/>} />
         <Route exact path="/artistmanage" element={<ManageArtist/>} />

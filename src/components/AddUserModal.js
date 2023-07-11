@@ -6,7 +6,7 @@ import { addUser } from '../services/UserServices';
 const AddUserModal=(props)=>{
 
     const handleSubmit = (e) => {
-      console.log('called')
+      console.log('called',e.target)
         e.preventDefault();
         addUser(e.target,props.token)
         .then((result)=>{
@@ -54,15 +54,28 @@ const AddUserModal=(props)=>{
                   <Form.Label>Date Of Birth</Form.Label>
                   <Form.Control type="date" name="dob" required placeholder="" />
                 </Form.Group>
+                <Form.Group controlId="address">
+                  <Form.Label>Address.</Form.Label>
+                  <Form.Control type="text" name="address" required placeholder="" />
+                </Form.Group>
                 <Form.Group controlId="password">
                   <Form.Label>Password</Form.Label>
                   <Form.Control type="password" name="password" required placeholder="" />
                 </Form.Group>
-                <Form.Group controlId="last_login">
+                <Form.Group controlId="gender">
+                  <Form.Label>Gender</Form.Label>
+                  <Form.Control as="select" name="gender" required>
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </Form.Control>
+                </Form.Group>
+                {/* <Form.Group controlId="last_login">
                   <Form.Label>Last Login</Form.Label>
                   <Form.Control type="datetime-local" name="last_login" required placeholder="" />
-                </Form.Group>
-                <Form.Group controlId="is_superuser">
+                </Form.Group> */}
+                {/* <Form.Group controlId="is_superuser">
                   <Form.Check type="checkbox" name="is_superuser" label="Is Superuser" />
                 </Form.Group>
                 <Form.Group controlId="date_joined">
@@ -74,7 +87,7 @@ const AddUserModal=(props)=>{
                 </Form.Group>
                 <Form.Group controlId="is_active">
                   <Form.Check type="checkbox" name="is_active" label="Is Active" />
-                </Form.Group>
+                </Form.Group> */}
                 <Form.Group>
                   <Button variant="primary" type="submit">
                     Submit

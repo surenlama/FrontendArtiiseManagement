@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Col, Row, Form, Button } from "react-bootstrap";
 import { addMusic } from "../services/MusicServices";
+import { getArtists } from "../services/ArtistServices";
 
 const AddMusicModal = (props) => {
+  const [artists, setArtists] = useState([]);
+  
+  useEffect(() => {
+    // Fetch the list of artists
+    getArtists(props.token)
+      .then((data) => {
+        setArtists(data.results);
+      })
+      .catch((error) => {
+        console.log("Failed to fetch artists:", error);
+      });
+  }, [props.token]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -12,8 +26,6 @@ const AddMusicModal = (props) => {
       title: formData.get("title"),
       album_name: formData.get("album_name"),
       genre: formData.get("genre"),
-      created_at: formData.get("created_at"),
-      updated_at: formData.get("updated_at"),
     };
 
     addMusic(newMusic, props.token)
@@ -45,13 +57,15 @@ const AddMusicModal = (props) => {
             <Col sm={6}>
               <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="artist_id">
-                  <Form.Label>Artist ID</Form.Label>
-                  <Form.Control
-                    type="number"
-                    name="artist_id"
-                    required
-                    placeholder="Enter Artist ID"
-                  />
+                  <Form.Label>Artist</Form.Label>
+                  <Form.Control as="select" name="artist_id" required>
+                    <option value="">Select Artist</option>
+                    {artists.map((artist) => (
+                      <option key={artist.id} value={artist.id}>
+                        {artist.name}
+                      </option>
+                    ))}
+                  </Form.Control>
                 </Form.Group>
                 <Form.Group controlId="title">
                   <Form.Label>Title</Form.Label>
@@ -70,7 +84,6 @@ const AddMusicModal = (props) => {
                     required
                     placeholder="Enter Album Name"
                   />
- 
                 </Form.Group>
                 <Form.Group controlId="genre">
                   <Form.Label>Genre</Form.Label>
@@ -83,24 +96,7 @@ const AddMusicModal = (props) => {
                     <option value="Jazz">Jazz</option>
                   </Form.Control>
                 </Form.Group>
-                <Form.Group controlId="created_at">
-                  <Form.Label>Created At</Form.Label>
-                  <Form.Control
-                    type="datetime-local"
-                    name="created_at"
-                    required
-                    placeholder=""
-                  />
-                </Form.Group>
-                <Form.Group controlId="updated_at">
-                  <Form.Label>Updated At</Form.Label>
-                  <Form.Control
-                    type="datetime-local"
-                    name="updated_at"
-                    required
-                    placeholder=""
-                  />
-                </Form.Group>
+              
                 <Form.Group>
                   <Button variant="primary" type="submit">
                     Submit

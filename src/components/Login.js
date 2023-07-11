@@ -10,14 +10,18 @@ function Login() {
   const [token, setToken] = useCookies(['mytoken']);
   const [isLogin, setLogin] = useState(true);
   const navigate = useNavigate();
+  const [error,setError] = useState(null);
 
   const loginBtn = () => {
     LoginUser({ username, password })
       .then(resp => {
         setToken('mytoken', resp.token);
-        navigate('/home'); // Navigate to the home directory
+        navigate('/musicmanage'); // Navigate to the home directory
       })
-      .catch(error => console.log('Error during login:', error));
+
+      .catch(error => {console.log('Error during login:', error)
+      setError('Invalid Login Credential')
+    });
   };
   
   const registerUser = () => {
@@ -48,6 +52,7 @@ console.log('start')
           <label htmlFor='password' className='form-label'>Password</label>
           <input type='password' className='form-control' id='password' placeholder='Please enter password' value={password} onChange={e => setPassword(e.target.value)} />
         </div>
+        <p className='text-danger'>{error}</p>
         {isLogin ? (
           <button onClick={loginBtn} className="btn btn-primary">Login</button>
         ) : (

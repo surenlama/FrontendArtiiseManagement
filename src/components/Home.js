@@ -2,10 +2,13 @@ import Carousel from 'react-bootstrap/Carousel';
 import slide01 from '../static/slide01.webp';
 import slide02 from '../static/slide02.jpg';
 import slide03 from '../static/slide03.jpg';
-
+import Navigation from './Navigation'
 
 const Home = () => {
   return (
+    <>
+          <Navigation />
+
     <div className='row'>
     <Carousel data-bs-theme="dark">
       <Carousel.Item>
@@ -34,7 +37,7 @@ const Home = () => {
       </Carousel.Item>
     </Carousel>
     </div>
-  );
+    </>);
 };
 
 export default Home;

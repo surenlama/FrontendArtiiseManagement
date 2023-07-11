@@ -3,9 +3,7 @@ import {Table} from 'react-bootstrap';
 import {getUsers} from '../services/UserServices';
 import "../App.css";
 import { useCookies } from 'react-cookie';
-import { Helmet } from 'react-helmet';
-
-
+import Navigation from './Navigation'
 
 const Users = ()=>{
     const [users, setUsers] = useState([]);
@@ -16,14 +14,16 @@ const Users = ()=>{
         getUsers(token['mytoken'])
         .then(data => {
             if (mounted) {
-                setUsers(data)
+                setUsers(data.results)
             }
         })
         return () => mounted = false;
     },[token]);
     return (
+      <>
+      <Navigation />
         <div className="row side-row">
-        <Table striped bordered hover id="user-table">
+        <Table striped bordered hover>
           <thead>
             <tr>
               <th>ID</th>
@@ -51,13 +51,11 @@ const Users = ()=>{
  
           </tr>
             )}      
-            
-           
           </tbody>
           
         </Table>
         </div>
-      );
+    </>  );
 }
 
 export default Users
