@@ -1,19 +1,31 @@
-import React from "react";
+import React,{useState}  from "react";
 import { Modal, Col, Row, Form, Button } from "react-bootstrap";
 import { addArtist } from "../services/ArtistServices";
 
 const AddArtistModal = (props) => {
+  const [error,setError] = useState("");
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    console.log('data appear',e.target)
     addArtist(e.target, props.token)
       .then((result) => {
         alert(result);
         props.setUpdated(true);
       })
-      .catch((error) => {
-        alert("Failed to Add Artist");
+      .catch(error => {
+        let errorMessage = 'An error occurred User Adding.';
+      
+        if (error.response && error.response.data) {
+          if (error.response.data.no_of_albums_released) {
+            errorMessage = error.response.data.no_of_albums_released[0]; 
+
+          } 
+          else if (error.response.data.dob) {
+
+            errorMessage = error.response.data.dob[0]; 
+          } 
+        }
+        setError(errorMessage); 
       });
   };
 
@@ -95,7 +107,10 @@ const AddArtistModal = (props) => {
                   <Button variant="primary" type="submit">
                     Submit
                   </Button>
+                  <p className='text-danger'>{error}</p>
+
                 </Form.Group>
+
               </Form>
             </Col>
           </Row>

@@ -5,6 +5,7 @@ import { getArtists } from "../services/ArtistServices";
 
 const UpdateMusicModal = (props) => {
   const [artists, setArtists] = useState([]);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     // Fetch the list of artists
@@ -33,7 +34,14 @@ const UpdateMusicModal = (props) => {
         props.setUpdated(true);
       })
       .catch((error) => {
-        alert("Failed to Update Music");
+        let errorMessage = "An error occurred User Adding."; // Default error message
+
+        if (error.response && error.response.data) {
+          if (error.response.data.non_field_errors) {
+            errorMessage = error.response.data.non_field_errors[0];
+          }
+        }
+        setError(errorMessage);
       });
   };
 
@@ -57,7 +65,12 @@ const UpdateMusicModal = (props) => {
               <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="artist_id">
                   <Form.Label>Artist ID</Form.Label>
-                  <Form.Control as="select" name="artist_id" defaultValue={props.music.artist_id} required>
+                  <Form.Control
+                    as="select"
+                    name="artist_id"
+                    defaultValue={props.music.artist_id}
+                    required
+                  >
                     <option value="">Select Artist ID</option>
                     {artists.map((artist) => (
                       <option key={artist.id} value={artist.id}>
@@ -102,6 +115,8 @@ const UpdateMusicModal = (props) => {
                     <option value="Rock">Rock</option>
                     <option value="Jazz">Jazz</option>
                   </Form.Control>
+
+                  <p className="text-danger">{error}</p>
                 </Form.Group>
 
                 <Button variant="primary" type="submit">

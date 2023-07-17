@@ -8,6 +8,8 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import { useCookies } from "react-cookie";
 import UpdateMusicModal from "./UpdateMusicModal";
 import Navigation from './Navigation'
+import { Link } from "react-router-dom";
+
 
 const ManageMusic = () => {
   const [musics, setMusics] = useState([]);
@@ -16,27 +18,54 @@ const ManageMusic = () => {
   const [editMusic, setEditMusic] = useState({});
   const [isMusicUpdated, setMusicisUpdated] = useState(false);
   const [token, setToken] = useCookies(["mytoken"]);
+  const [totalResult, setTotalResults] = useState(0);
+  const baseUrl = 'http://127.0.0.1:8000'
+
 
   useEffect(() => {
     let mounted = true;
     if (musics.length && !isMusicUpdated) {
       return;
     }
-    getMusics(token["mytoken"])
-      .then((data) => {
-        console.log("Musics data:", data.results.artist_id);
-        if (mounted) {
-          setMusics(data.results);
-        }
-      })
-      .catch((error) => {
-        console.log("Failed to fetch Musics:", error);
-      });
+ 
+    fetchData(baseUrl + '/musicapi', token['mytoken']);
+
     return () => {
       mounted = false;
       setMusicisUpdated(false);
     };
   }, [isMusicUpdated, musics, token]);
+
+  function fetchData(baseurl, token) {
+    fetch(baseurl, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Token ${token}`,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          return [];
+        }
+      })
+      .then((data) => {
+        const musics = data.results;
+        if (musics) {
+          setMusics(musics);
+          setTotalResults(data.count);
+        } else {
+          setMusics([]);
+          setTotalResults(0);
+        }
+      }).catch((error) => {
+        alert("Page not found", error);
+      });
+  }
+
+
 
   const handleAdd = (e) => {
     e.preventDefault();
@@ -65,6 +94,13 @@ const ManageMusic = () => {
 
   let AddMusicClose = () => setAddMusicShow(false);
   let EditMusicClose = () => setEditMusicShow(false);
+
+  function changeUrl(baseurl){
+    fetchData(baseurl, token['mytoken']);  }
+  var links =[];
+  for(let i=1;i<=Math.ceil(totalResult/5);i++){
+    links.push(<li class="page-item"><Link onClick={()=>changeUrl(baseUrl+`/musicapi/?page=${i}`)} to={`/musicmanage/?page=${i}`} class="page-link">{i}</Link></li>)
+  }
 
   return (
     <>
@@ -131,6 +167,15 @@ const ManageMusic = () => {
           Add Music
         </Button>{" "}
       </ButtonToolbar>
+      <nav aria-label="Page navigation example mt-5">
+  <ul className="pagination justify-content-center">
+            {links}
+
+  </ul>
+</nav>
+
+
+
       <AddMusicModal
         show={addMusicShow}
         onHide={AddMusicClose}

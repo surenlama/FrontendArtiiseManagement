@@ -1,21 +1,47 @@
-import React from "react";
+import React,{useState} from "react";
 import {Modal, Col, Row, Form, Button} from 'react-bootstrap';
 // import {FormControl, FormGroup, FormLabel} from 'react-bootstrap';
 import { addUser } from '../services/UserServices';
 
 const AddUserModal=(props)=>{
+  const [error,setError] = useState(null);
 
-    const handleSubmit = (e) => {
-      console.log('called',e.target)
-        e.preventDefault();
-        addUser(e.target,props.token)
-        .then((result)=>{
-            alert(result);
-            props.setUpdated(true);
-        },
-        (error)=>{
-            alert("Failed to Add User");
-        })
+  const handleSubmit = (e) => {
+    console.log("called", e.target);
+    e.preventDefault();
+    addUser(e.target, props.token)
+      .then((result) => {
+        alert(result);
+        props.setUpdated(true);
+      })
+      .catch(error => {
+        let errorMessage = 'An error occurred User Adding.'; // Default error message
+      
+        if (error.response && error.response.data) {
+          if (error.response.data.first_name) {
+
+            errorMessage = error.response.data.first_name[0]; 
+
+          } else if (error.response.data.phone) {
+            
+            errorMessage = error.response.data.phone[0]; 
+          }
+          else if (error.response.data.dob) {
+            
+            errorMessage = error.response.data.dob[0]; 
+          }
+          else if (error.response.data.password) {
+            
+            errorMessage = error.response.data.password[0]; 
+          }
+          else if (error.response.data.email) {
+            errorMessage = error.response.data.email[0]; 
+          }
+        
+        }
+           console.log('error',error.response);
+        setError(errorMessage); 
+      });
     }
 
     return (
@@ -92,6 +118,8 @@ const AddUserModal=(props)=>{
                   <Button variant="primary" type="submit">
                     Submit
                   </Button>
+                  <p className='text-danger'>{error}</p>
+
                 </Form.Group>
               </Form>
             </Col>

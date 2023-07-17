@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal, Col, Row, Form, Button, FormControl } from "react-bootstrap";
 import { UpdateArtist } from "../services/ArtistServices";
 
 const UpdateArtistModal = (props) => {
+  const [error, setError] = useState("");
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const artistId = props.artist.id
+    const artistId = props.artist.id;
 
     const updatedArtist = {
       name: e.target.name.value,
@@ -22,7 +24,16 @@ const UpdateArtistModal = (props) => {
         props.setUpdated(true);
       })
       .catch((error) => {
-        alert("Failed to Update Artist");
+        let errorMessage = "An error occurred User Adding.";
+
+        if (error.response && error.response.data) {
+          if (error.response.data.no_of_albums_released) {
+            errorMessage = error.response.data.no_of_albums_released[0];
+          } else if (error.response.data.dob) {
+            errorMessage = error.response.data.dob[0];
+          }
+        }
+        setError(errorMessage);
       });
   };
 
@@ -107,9 +118,8 @@ const UpdateArtistModal = (props) => {
                     defaultValue={props.artist.no_of_albums_released}
                     required
                   />
+                  <p className="text-danger">{error}</p>
                 </Form.Group>
-               
-              
 
                 <Button variant="primary" type="submit">
                   Submit

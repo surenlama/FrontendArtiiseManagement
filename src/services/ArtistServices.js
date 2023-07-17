@@ -1,5 +1,39 @@
 import axios from 'axios';
-// artistServices.js
+
+export function getArtistCSV(token) {
+  console.log('hitted');
+  return axios
+    .get('http://127.0.0.1:8000/artistcsvview/', {
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Token ${token}`,
+      },
+      responseType: 'blob', // Set the response type to 'blob'
+    })
+    .then(response => response.data);
+}
+
+
+
+export function importArtistCSV(token, file) {
+  console.log('file', file.name);
+  const formData = new FormData();
+  formData.append("file", file);
+
+  return axios.post('http://127.0.0.1:8000/csvfile/', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Authorization: `Token ${token}`,
+    },
+  })
+  .then(response => response.data)
+  
+  // .catch(error => {
+  //   console.log('error dataa', error);
+  //   throw new Error(error.response.data.error);
+  // });
+}
+
 
 export function getArtistMusics(token,artistid) {
   return axios.get(`http://127.0.0.1:8000/artistmusicapi/${artistid}/`,{

@@ -8,6 +8,7 @@ import {FaEdit} from 'react-icons/fa';
 import { RiDeleteBin5Line } from 'react-icons/ri';
 import { useCookies } from 'react-cookie';
 import Navigation from './Navigation'
+import { Link } from "react-router-dom";
 
 
 const Manage = () => {
@@ -17,23 +18,52 @@ const Manage = () => {
   const [editUser, setEditUser] = useState([]);
   const [isUserUpdated, setUserisUpdated] = useState(false);
   const [token, setToken] = useCookies(['mytoken']);
+  const [totalResult, setTotalResults] = useState(0);
+  const baseUrl = 'http://127.0.0.1:8000'
+
 
   useEffect(() => {
     let mounted = true;
     if (users.length && !isUserUpdated) {
       return;
     }
-    getUsers(token['mytoken']).then((data) => {
-      if (mounted) {
-        setUsers(data.results);
-      }
-    });
+    fetchData(baseUrl + '/userapi', token['mytoken']);
     return () => {
       mounted = false;
       setUserisUpdated(false);
     };
-  }, [isUserUpdated, users,token]);
-
+  }, [isUserUpdated, users, token]);
+  
+  function fetchData(baseurl, token) {
+    fetch(baseurl, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Token ${token}`,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          return [];
+        }
+      })
+      .then((data) => {
+        const users = data.results;
+        if (users) {
+          setUsers(users);
+          setTotalResults(data.count);
+        } else {
+          setUsers([]);
+          setTotalResults(0);
+        }
+      }).catch((error) => {
+        alert("Page not found", error);
+      });
+  }
+  
+  
   const handleAdd = (e) => {
     e.preventDefault();
     setAddUserShow(true);
@@ -59,7 +89,14 @@ const Manage = () => {
   };
   let AddUserClose = () => setAddUserShow(false);
   let EditUserClose = () => setEditUserShow(false);
-
+ 
+  function changeUrl(baseurl){
+    fetchData(baseurl, token['mytoken']);  }
+  var links =[];
+  console.log('link',links)
+  for(let i=1;i<=Math.ceil(totalResult/5);i++){
+    links.push(<li class="page-item"><Link onClick={()=>changeUrl(baseUrl+`/userapi/?page=${i}`)} to={`/manage/?page=${i}`} class="page-link">{i}</Link></li>)
+  }
   return (
     <>
     <Navigation />
@@ -75,7 +112,7 @@ const Manage = () => {
             <th>Date of birth</th>
             <th>Gender</th>
             <th>Address</th>
-            <th>Action</th>
+            <th style={{ width: '105px' }}>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -90,11 +127,13 @@ const Manage = () => {
               <td>{user.gender}</td>
               <td>{user.address}</td>
               <td>
-              <Button className="mr-2" variant="danger"
-                onClick={event => handleDelete(event, user.id)}>
+              <Button
+               className="mr-2" 
+               variant="danger"
+                onClick={event => handleDelete(event, user.id)}
+                >
                   <RiDeleteBin5Line/>
                 </Button>
-                <span>&nbsp;&nbsp;</span>
 
                 <Button
                   className="mr-2"
@@ -110,7 +149,7 @@ const Manage = () => {
                   setUpdated={setUserisUpdated}
                   token={token['mytoken']} // Pass the token here
 
-                ></UpdateUserModal>
+                />
                
               </td>
             </tr>
@@ -121,7 +160,15 @@ const Manage = () => {
         <Button variant="success" onClick={handleAdd}>
           Add User
         </Button>{" "}
+
+        
       </ButtonToolbar>
+      <nav aria-label="Page navigation example mt-5">
+  <ul className="pagination justify-content-center">
+            {links}
+
+  </ul>
+</nav>
       <AddUserModal
         show={addUserShow}
         onHide={AddUserClose}

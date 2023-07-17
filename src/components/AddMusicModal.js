@@ -5,7 +5,8 @@ import { getArtists } from "../services/ArtistServices";
 
 const AddMusicModal = (props) => {
   const [artists, setArtists] = useState([]);
-  
+  const [error,setError] = useState("");
+
   useEffect(() => {
     // Fetch the list of artists
     getArtists(props.token)
@@ -33,8 +34,17 @@ const AddMusicModal = (props) => {
         alert(result);
         props.setUpdated(true);
       })
-      .catch((error) => {
-        alert("Failed to Add Music");
+      .catch(error => {
+        let errorMessage = 'An error occurred User Adding.'; // Default error message
+      
+        if (error.response && error.response.data) {
+          if (error.response.data.non_field_errors) {
+            errorMessage = error.response.data.non_field_errors[0]; 
+
+          } 
+        
+        }
+        setError(errorMessage); 
       });
   };
 
@@ -95,6 +105,8 @@ const AddMusicModal = (props) => {
                     <option value="Rock">Rock</option>
                     <option value="Jazz">Jazz</option>
                   </Form.Control>
+                  <p className='text-danger'>{error}</p>
+
                 </Form.Group>
               
                 <Form.Group>

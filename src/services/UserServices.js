@@ -2,10 +2,17 @@ import axios from 'axios';
 // UserServices.js
 
 export function RegisterUser(user,token){
-  console.log('userssss',user.email)
+  console.log('userssss',user)
   return axios.post('http://localhost:8000/register/', {
     
     email:user.email,
+    first_name:user.first_name,
+    last_name:user.last_name,
+    email:user.email,
+    phone:user.phone,
+    dob:user.dob,
+    gender:user.gender,
+    address:user.address,
     password:user.password,
 
   },{
@@ -19,6 +26,8 @@ export function RegisterUser(user,token){
   )
     .then(response=>response.data)
 }
+
+
 export const LoginUser = async (credentials) => {
   console.log('credentials', credentials.username,credentials.password);
   

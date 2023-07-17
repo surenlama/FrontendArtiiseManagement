@@ -13,3 +13,5 @@ npm install react-icons
 npm install react-router-dom
 npm install react-cookie
 npm install react-helmet
+npm install file-saver
+
